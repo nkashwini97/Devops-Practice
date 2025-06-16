@@ -71,3 +71,43 @@ pipeline {
         }
     }
 }
+
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ashwini-deploy
+  labels:
+    app: ashwini-deploy-lbl
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: ashwini-app
+  template:
+    metadata:
+      labels:
+        app: ashwini-app
+    spec:
+      containers:
+      - name: ashwini-container
+        image: 95ashwini/ashu-webapp
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ashwini-np-service
+  labels:
+    app: ashwini-app
+spec:
+  selector:
+    app: ashwini-deploy-lbl
+
+  type: NodePort
+  ports:
+  - nodePort: 31028
+    port: 8080
+    targetPort: 8080
