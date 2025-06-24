@@ -1,0 +1,69 @@
+Terraform
+
+
+rovider "aws" {
+  region     = "ap-south-1"
+  access_key = "AKIARXXSW4VZXCZ4HP2M"
+  secret_key =   "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"
+}
+
+
+resource "aws_instance" "web" {
+  ami           = "ami-0f918f7e67a3323f0"
+  instance_type = "t2.medium"
+  key_name      = "mubai_keypair"
+  count = 6
+
+  tags = {
+    Name = "test_VS_code"
+  }
+}
+
+
+
+
+Ansible_playbook in jenkins master
+
+#Add User in Ansible Controller : 
+
+useradd devopsadmin -s /bin/bash -m -d /home/devopsadmin
+ssh-keygen -t ecdsa -b 521
+
+#Goto Node1&2, within ansibleadmin home directory, create .ssh directory
+
+vi authorized_keys
+
+#paste the id_ecdsa.pub of devopsadmin user from controller machine to authorized_keys file in Ansible Node1 
+
+chmod 600 /home/ansibleadmin/.ssh/*
+
+ssh ansibleadmin@172.31.5.227
+ssh ansibleadmin@172.31.14.183
+
+chown -R devopsadmin:devopsadmin /etc/ansible
+
+update vi etc/ansible/hosts
+[testnodes]
+samplenode1 ansible_ssh_host=172.31.5.227 ansible_ssh_user=ansibleadmin
+samplenode2 ansible_ssh_host=172.31.14.183 ansible_ssh_user=ansibleadmin
+samplenode3 ansible_ssh_host=172.31.14.183 ansible_ssh_user=ansibleadmin
+
+ansible testnodes -m ping 
+
+
+playbook
+---
+  - hosts: samplenode1
+    become: yes
+    tasks:
+      - apt:
+         name: git
+         state: present
+      - apt:
+         name: maven
+         state: present
+
+
+
+Try_it
+
