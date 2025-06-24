@@ -3,8 +3,8 @@ Terraform
 
 rovider "aws" {
   region     = "ap-south-1"
-  access_key = "AKIARXXSW4VZXCZ4HP2M"
-  secret_key =   "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"
+  access_key = "___"
+  secret_key =   "___"
 }
 
 
